@@ -1,0 +1,14 @@
+﻿@page "/programador/create"
+@inject HttpClient ClienteHttp
+@inject NavigationManager UriHelper
+<h3>Create</h3>
+<Formulario ButtonText="Nuevo Programador" programador="@programador" OnValidSubmit="@NuevoProgramador" />
+
+@code {
+    Programador programador = new Programador();
+    async Task NuevoProgramador()
+    {
+        await ClienteHttp.PostAsJsonAsync("api/programador", programador);
+        UriHelper.NavigateTo("programador");
+    }
+}

@@ -1,0 +1,67 @@
+﻿@page "/programador"
+@inject HttpClient clienteHttp
+@inject IJSRuntime js
+<h3>Programadores</h3>
+<small>Agrega los programadores que desee</small>
+<div class="form-group">
+    <a class="btn btn-success" href="programador/create"><i class="oi oi-plus"></i> Nuevo</a>
+</div>
+<br>
+@if (programadores == null)
+{
+    <text>Loading...</text>
+}
+else if (!programadores.Any())
+{
+    <text>No hay datos.</text>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Email</th>
+            <th>Experiencia (Años)</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var programador in programadores)
+        {
+            <tr>
+                <td>@programador.Id</td>
+                <td>@programador.Nombre</td>
+                <td>@programador.Apellido</td>
+                <td>@programador.Email</td>
+                <td>@programador.Experiencia</td>
+                <td>
+                    <a class="btn btn-success" href="programador/edit/@programador.Id">Editar</a>
+                    <button class="btn btn-danger" @onclick="@(() => Delete(programador.Id))">Eliminar</button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+@code {
+    Programador[] programadores { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        programadores = await clienteHttp.GetFromJsonAsync<Programador[]>("api/programador");
+    }
+
+    async Task Delete(int developerId)
+    {
+        var programador = programadores.First(x => x.Id == developerId);
+        if (await js.InvokeAsync<bool>("confirm", $"Quiere eliminar el registro de {programador.Nombre} ({programador.Id})?"))
+        {
+            await clienteHttp.DeleteAsync($"api/programador/{developerId}");
+            await OnInitializedAsync();
+        }
+    }
+
+}

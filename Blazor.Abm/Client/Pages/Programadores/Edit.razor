@@ -1,0 +1,21 @@
+﻿@page "/programador/edit/{programadorId:int}"
+@inject HttpClient Clientehttp
+@inject NavigationManager uriHelper
+@inject IJSRuntime js
+<h3>Edit</h3>
+<Formulario ButtonText="Actualizar" programador="@programador"
+      OnValidSubmit="@EditarProgramador" />
+@code {
+    [Parameter] public int programadorId { get; set; }
+    Programador programador = new Programador();
+    protected async override Task OnParametersSetAsync()
+    {
+        programador = await Clientehttp.GetFromJsonAsync<Programador>($"api/programador/{programadorId}");
+    }
+    async Task EditarProgramador()
+    {
+        await Clientehttp.PutAsJsonAsync("api/programador", programador);
+        await js.InvokeVoidAsync("alert", $"Se ha modificado exitosamente!");
+        uriHelper.NavigateTo("programador");
+    }
+}

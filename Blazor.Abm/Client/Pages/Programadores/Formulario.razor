@@ -1,0 +1,45 @@
+﻿<EditForm Model="@programador" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label>Nombre :</label>
+        <div>
+            <InputText @bind-Value="@programador.Nombre" />
+            <ValidationMessage For="@(() => programador.Nombre)" />
+        </div>
+    </div>
+    <div class="form-group ">
+        <div>
+            <label>Apellido :</label>
+            <div>
+                <InputText @bind-Value="@programador.Apellido" />
+                <ValidationMessage For="@(() => programador.Apellido)" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group ">
+        <div>
+            <label>Email :</label>
+            <div>
+                <InputText @bind-Value="@programador.Email" />
+                <ValidationMessage For="@(() => programador.Email)" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group ">
+        <div>
+            <label>Experiencia :</label>
+            <div>
+                <InputNumber @bind-Value="@programador.Experiencia" />
+                <ValidationMessage For="@(() => programador.Experiencia)" />
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success">
+        @ButtonText
+    </button>
+</EditForm>
+@code {
+    [Parameter] public Programador programador { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Guardar";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}
