@@ -54,12 +54,12 @@ else
         programadores = await clienteHttp.GetFromJsonAsync<Programador[]>("api/programador");
     }
 
-    async Task Delete(int developerId)
+    async Task Delete(int id)
     {
-        var programador = programadores.First(x => x.Id == developerId);
+        var programador = programadores.First(x => x.Id == id);
         if (await js.InvokeAsync<bool>("confirm", $"Quiere eliminar el registro de {programador.Nombre} ({programador.Id})?"))
         {
-            await clienteHttp.DeleteAsync($"api/programador/{developerId}");
+            await clienteHttp.DeleteAsync($"api/programador/{id}");
             await OnInitializedAsync();
         }
     }
